@@ -44,7 +44,7 @@ PORT=5000
 CLIENT_URL=http://localhost:8080
 
 # MongoDB
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/citizenconnect
+MONGODB_URI=your_new_connection_string
 
 # JWT
 JWT_SECRET=your-secret-key-min-32-characters-here
