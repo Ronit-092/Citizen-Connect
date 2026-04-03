@@ -1,0 +1,14 @@
+[build]
+  command = "cd client && npm install && npm run build"
+  publish = "client/dist"
+
+[[redirects]]
+  force = true
+  from = "/api/*"
+  status = 200
+  to = "https://test2-0-oq8f.onrender.com/api/:splat"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

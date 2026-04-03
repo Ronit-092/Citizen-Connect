@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CitizenConnect - Bridge the gap between citizens and government. Report civic issues, track progress in real-time, and hold authorities accountable with complete transparency." />
+    <meta name="keywords" content="civic issues, government, complaints, transparency, public services" />
+    <meta name="author" content="CitizenConnect" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <!-- Leaflet CSS (preload for map components) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin="" />
+    
+    <title>CitizenConnect - Your Voice, Their Action</title>
+    
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#7c3aed" />
+    
+    <!-- Critical CSS inlined for faster loading -->
+    <style>
+      /* Critical above-the-fold styles */
+      html, body, #root {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 100vh;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #0f0f1e 0%, #1a0a3e 50%, #0a0a1a 100%);
+        color: white;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      /* Quantum Loading Screen */
+      .loading-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0f0f1e 0%, #1a0a3e 50%, #0a0a1a 100%);
+        z-index: 9999;
+        overflow: hidden;
+        will-change: opacity;
+      }
+
+      /* Neural Network Background Animation - Simplified */
+      .neural-bg {
+        position: absolute;
+        inset: 0;
+        opacity: 0.15;
+        background: radial-gradient(ellipse at 20% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+                    radial-gradient(ellipse at 80% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 40%);
+      }
+
+      /* Animated Grid Pattern - Optimized */
+      .grid-pattern {
+        position: absolute;
+        inset: 0;
+        background-image: 
+          linear-gradient(0deg, transparent 24%, rgba(6, 182, 212, 0.03) 25%, rgba(6, 182, 212, 0.03) 26%, transparent 27%, transparent 74%, rgba(6, 182, 212, 0.03) 75%, rgba(6, 182, 212, 0.03) 76%, transparent 77%, transparent),
+          linear-gradient(90deg, transparent 24%, rgba(6, 182, 212, 0.03) 25%, rgba(6, 182, 212, 0.03) 26%, transparent 27%, transparent 74%, rgba(6, 182, 212, 0.03) 75%, rgba(6, 182, 212, 0.03) 76%, transparent 77%, transparent);
+        background-size: 60px 60px;
+        opacity: 0.1;
+      }
+
+      /* Loading Content Container */
+      .loading-content {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+      }
+
+      /* Quantum Core Spinner - Optimized */
+      .quantum-spinner {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Core Circle - Fast rotation */
+      .core-circle {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 2px solid transparent;
+        border-top: 2px solid rgba(6, 182, 212, 0.9);
+        border-right: 2px solid rgba(168, 85, 247, 0.5);
+        border-radius: 50%;
+        animation: rotate-core 1.5s linear infinite;
+        will-change: transform;
+      }
+
+      @keyframes rotate-core {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      /* Orbital Rings - Simplified */
+      .orbital-ring {
+        position: absolute;
+        border: 1px solid transparent;
+        border-radius: 50%;
+        animation: rotate-orbit 2.5s linear infinite reverse;
+        will-change: transform;
+      }
+
+      .ring-1 {
+        width: 85%;
+        height: 85%;
+        border-top: 1px solid rgba(6, 182, 212, 0.3);
+      }
+
+      .ring-2 {
+        width: 65%;
+        height: 65%;
+        border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+      }
+
+      @keyframes rotate-orbit {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      /* Central Pulse - Optimized */
+      .core-pulse {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: radial-gradient(circle, rgba(6, 182, 212, 0.9), rgba(6, 182, 212, 0.4));
+        border-radius: 50%;
+        box-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+        animation: pulse-core 1.2s ease-in-out infinite;
+        will-change: transform;
+      }
+
+      @keyframes pulse-core {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+      }
+
+      /* Loading Text - Simplified */
+      .loading-text {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: rgba(6, 182, 212, 0.95);
+      }
+
+      /* Status Indicators - Lightweight */
+      .status-indicators {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        gap: 20px;
+        font-size: 11px;
+      }
+
+      .status-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        animation: status-glow 1.5s ease-in-out infinite;
+        will-change: opacity;
+      }
+
+      .dot-cyan {
+        background: rgba(6, 182, 212, 0.95);
+        box-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+      }
+
+      .dot-purple {
+        background: rgba(168, 85, 247, 0.95);
+        box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+        animation-delay: 0.3s;
+      }
+
+      .dot-green {
+        background: rgba(34, 197, 94, 0.95);
+        box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+        animation-delay: 0.6s;
+      }
+
+      @keyframes status-glow {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+      }
+
+      .status-label {
+        color: rgba(255, 255, 255, 0.7);
+        font-family: 'Courier New', monospace;
+        font-weight: 500;
+      }
+
+      /* Floating Particles - Removed for performance */
+
+      /* Hide loading once app loads */
+      #root:not(:empty) ~ .loading-container {
+        pointer-events: none;
+        animation: fade-out 0.6s ease-out forwards;
+      }
+
+      @keyframes fade-out {
+        0% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- App container -->
+    <div id="root"></div>
+    
+    <!-- Quantum Loading Screen -->
+    <div class="loading-container">
+      <!-- Neural Background -->
+      <div class="neural-bg"></div>
+      <div class="grid-pattern"></div>
+
+      <!-- Loading Content -->
+      <div class="loading-content">
+        <!-- Quantum Spinner -->
+        <div class="quantum-spinner">
+          <div class="orbital-ring ring-1"></div>
+          <div class="orbital-ring ring-2"></div>
+          <div class="core-circle"></div>
+          <div class="core-pulse"></div>
+        </div>
+
+        <!-- Loading Text -->
+        <div class="loading-text">Initializing Neural Link</div>
+
+        <!-- Status Indicators -->
+        <div class="status-indicators">
+          <div class="status-item">
+            <div class="status-dot dot-cyan"></div>
+            <span class="status-label">QUANTUM</span>
+          </div>
+          <div class="status-item">
+            <div class="status-dot dot-purple"></div>
+            <span class="status-label">NEURAL</span>
+          </div>
+          <div class="status-item">
+            <div class="status-dot dot-green"></div>
+            <span class="status-label">ONLINE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Module script -->
+    <script type="module" src="/main.tsx"></script>
+    
+    <!-- Fast loading hide script -->
+    <script>
+      // Hide loading screen immediately when React mounts
+      const hideLoadingScreen = () => {
+        const loadingContainer = document.querySelector('.loading-container');
+        if (loadingContainer) {
+          loadingContainer.style.opacity = '0';
+          loadingContainer.style.pointerEvents = 'none';
+        }
+      };
+      
+      // Check every 50ms if React has mounted (faster than waiting for full load)
+      const checkInterval = setInterval(() => {
+        const root = document.getElementById('root');
+        if (root && root.children.length > 0) {
+          clearInterval(checkInterval);
+          hideLoadingScreen();
+        }
+      }, 50);
+      
+      // Fallback: hide after 2 seconds max
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        hideLoadingScreen();
+      }, 2000);
+    </script>
+    
+    <!-- Fallback for browsers that don't support modules -->
+    <script nomodule>
+      document.body.innerHTML = '<div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;"><h1>Browser Not Supported</h1><p>Please use a modern browser that supports JavaScript modules.</p></div>';
+    </script>
+  </body>
+</html>
